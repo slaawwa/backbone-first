@@ -26,13 +26,17 @@
         <button type="button" class="deleteBtn">X</button>
     </script>
 
-    <h1>Список задач:</h1>
+    <script type="text/template" id="taskHome">
+        <h1>Список задач:</h1>
 
-    <form action="" id="addTask">
-        <input type="text" placeholder="Нова задача">
-        <input type="number" placeholder="1 - 10" min="1" max="10">
-        <input type="submit" value="Додати задачу">
-    </form>
+        <form action="" id="addTask">
+            <input type="text" placeholder="Нова задача">
+            <input type="number" placeholder="1 - 10" min="1" max="10">
+            <input type="submit" value="Додати задачу">
+        </form>
+    </script>
+
+    <div id="page"></div>
 
     <script src="/libs/jquery/dist/jquery.min.js"></script>
     <script src="/libs/underscore/underscore-min.js"></script>

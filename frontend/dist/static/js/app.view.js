@@ -19,17 +19,22 @@ APP.view.Task = Backbone.View.extend({
     },
 
     editTask() {
+        if (APP.helper.routerIs('home')) {
 
-        const newTitle = prompt('Як перейменуємо задачу?', this.model.get('title'))
+            // app.router.set()
+            location.hash = `task/${this.model.cid}`
+        } else {
 
-        this.model.set('title', newTitle, {validate: true})
+            const newTitle = prompt('Як перейменуємо задачу?', this.model.get('title'))
+            this.model.set('title', newTitle)
+        }
 
         return this
     },
 
     statusTask() {
 
-        this.model.set('complete', !this.model.get('complete'), {validate: true})
+        this.model.set('complete', !this.model.get('complete'))
 
         return this
     },
@@ -62,6 +67,8 @@ APP.view.Tasks = Backbone.View.extend({
 
     initialize() {
 
+        app.vent.on('tasksView:show', this.tasksViewShow, this)
+
         app.vent.on('taskView:show', this.taskViewShow, this)
 
         this.collection.on('add', this.addOne, this)
@@ -72,6 +79,23 @@ APP.view.Tasks = Backbone.View.extend({
     taskViewShow(id) {
 
         console.log('taskViewShow:', id)
+
+        const taskView = this.collection._byId[id]
+
+        app.taskView = new APP.view.Task({model: taskView})
+
+        app.html( app.taskView.render().el )
+
+        return this
+    },
+
+    tasksViewShow() {
+
+        app.addTask = new APP.view.AddTask({
+            collection: this.collection,
+        })
+
+        app.html( app.tasksView.render().el, 'append')
 
         return this
     },
@@ -87,6 +111,8 @@ APP.view.Tasks = Backbone.View.extend({
 
     render() {
 
+        this.$el.empty()
+
         this.collection.each(this.addOne, this)
 
         return this
@@ -94,7 +120,8 @@ APP.view.Tasks = Backbone.View.extend({
 })
 
 APP.view.AddTask = Backbone.View.extend({
-    el: '#addTask',
+    // el: '#addTask',
+    template: APP.helper.template('taskHome'),
     events: {
         submit: 'submit',
     },
@@ -117,6 +144,15 @@ APP.view.AddTask = Backbone.View.extend({
         return this
     },
     initialize() {
+
+        this.render()
+
+        return this
+    },
+    render() {
+
+        app.html( this.$el.html( this.template() ) )
+
         return this
     },
 })
