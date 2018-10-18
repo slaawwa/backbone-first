@@ -4,6 +4,9 @@ window.app = {
     html: (html, method='html') => {
         return APP.helper.$page[method]( html )
     },
+    url: (url, opt={}) => {
+        app.router.navigate(url, Object.assign({trigger: true/*, replace: true*/}, opt))
+    },
     setRoutes: () => {
 
         app.router = new app.APP.router()

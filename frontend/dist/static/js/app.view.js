@@ -8,7 +8,8 @@ APP.view.Task = Backbone.View.extend({
     events: {
         'click .deleteBtn': 'deleteTask',
         'click .editBtn': 'editTask',
-        'click .statusBtn': 'statusTask',
+        'change .taskCompleteEdit': 'statusTask',
+        'dblclick .title': 'editTask',
     },
 
     deleteTask() {
@@ -18,11 +19,11 @@ APP.view.Task = Backbone.View.extend({
         return this
     },
 
-    editTask() {
-        if (APP.helper.routerIs('home')) {
+    editTask(e) {
+        if (e.type === 'click') {
 
-            // app.router.set()
-            location.hash = `task/${this.model.cid}`
+            // location.hash = `task/${this.model.cid}`
+            app.url(`task/${this.model.cid}`)
         } else {
 
             const newTitle = prompt('Як перейменуємо задачу?', this.model.get('title'))
@@ -43,6 +44,8 @@ APP.view.Task = Backbone.View.extend({
 
         this.$el.remove()
 
+        setTimeout(() => app.url(''), 150)
+
         return this
     },
 
@@ -56,7 +59,11 @@ APP.view.Task = Backbone.View.extend({
     },
 
     render() {
-        this.$el.html( this.template( this.model.toJSON() ) )
+
+        const isHome = APP.helper.routerIs('home'),
+            ctx = Object.assign({isHome}, this.model.toJSON() )
+
+        this.$el.html( this.template( ctx ) )
 
         return this
     },

@@ -16,14 +16,17 @@
     </div>
 
     <script type="text/template" id="taskView">
-        <% if (complete) { %><s><% } %>
-            [<%= priority %>] <%= title %>
-        <% if (complete) { %></s><% } %>
-        <button type="button" class="statusBtn">
-            <% if (complete) { %>In progress<% } else { %>Done<% } %>
-        </button>
+        <input type="checkbox" class="taskCompleteEdit"<%- complete? ' checked="checked"': ''%>>
+        <span class="title">
+            <% if (complete) { %><s><% } %>
+                [<%= priority %>] <%= title %>
+            <% if (complete) { %></s><% } %>
+        </span>
         <button type="button" class="editBtn">Edit</button>
-        <button type="button" class="deleteBtn">X</button>
+        <% if (!isHome) { %>
+            <button type="button" class="deleteBtn">X</button>
+            <a href="#">HOME</a>
+        <% } %>
     </script>
 
     <script type="text/template" id="taskHome">
