@@ -1,9 +1,12 @@
 
 window.app = {
     vent: _.extend({}, Backbone.Events),
+    html: (html, method='html') => {
+        return APP.helper.$page[method]( html )
+    },
     setRoutes: () => {
 
-        app.router = new APP.router()
+        app.router = new app.APP.router()
 
         Backbone.history.start()
     },
@@ -23,6 +26,7 @@ window.APP = {
         },
         home() {
             console.log('INDEX')
+            app.vent.trigger('tasksView:show')
         },
         taskView(id) {
             console.log('taskView:', id)
